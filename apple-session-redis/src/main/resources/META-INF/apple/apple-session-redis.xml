@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<bean id="redisSentinelPool" class="com.appleframework.session.data.redis.RedisSentinelPool">
+		<property name="hosts" value="${redis.hosts}" />
+		<property name="auth" value="${redis.auth}" />
+		<property name="maxIdle" value="${redis.maxIdle:5}" />
+		<property name="maxTotal" value="${redis.maxTotal:20}" />
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis:10000}" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="redisSessionCache" class="com.appleframework.session.data.redis.RedisSessionCache">
+		<property name="cachePool" ref="redisSentinelPool" />
+	</bean>
+	
+	<!-- 配置会话缓存管理器 -->
+	<bean id="sessionCacheManager" class="com.appleframework.session.data.SessionCacheManager">
+		<property name="sessionCache" ref="redisSessionCache" />
+	</bean>
+
+</beans>

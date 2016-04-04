@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<bean id="codisResourcePool" class="com.appleframework.session.data.codis.CodisResourcePool">
+		<property name="zkAddr" value="${codis.zkAddr}" />
+		<property name="zkProxyDir" value="${codis.zkProxyDir}" />
+		<property name="zkSessionTimeoutMs" value="${codis.zkSessionTimeoutMs:30000}" />
+	</bean>
+
+	<bean id="codisSessionCache" class="com.appleframework.session.data.redis.RedisSessionCache">
+		<property name="cachePool" ref="codisResourcePool" />
+	</bean>
+	
+	<!-- 配置会话缓存管理器 -->
+	<bean id="sessionCacheManager" class="com.appleframework.session.data.SessionCacheManager">
+		<property name="sessionCache" ref="codisSessionCache" />
+	</bean>
+
+</beans>
