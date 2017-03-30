@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-	<bean id="redissonSessionCache" class="com.appleframework.session.data.redis.RedissonSessionCache">
+	<bean id="redissonSessionCache" class="com.appleframework.session.data.redisson.RedissonSessionCache">
 		<property name="redisson" ref="redisson" />
 	</bean>
 	

@@ -1,8 +1,8 @@
-package com.appleframework.session.data.redis;
+package com.appleframework.session.data.redisson;
 
 import java.util.concurrent.TimeUnit;
 
-import org.redisson.RedissonClient;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
