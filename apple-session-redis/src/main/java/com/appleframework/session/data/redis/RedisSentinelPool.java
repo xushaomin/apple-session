@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisSentinelPool;
 
-public class RedisSentinelPool implements InitializingBean, DisposableBean {
+public class RedisSentinelPool implements InitializingBean, DisposableBean, RedisPool {
 
 	private JedisSentinelPool jedisSentinelPool;
 
