@@ -12,13 +12,13 @@ public class RedisSessionCache implements SessionCache {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RedisSessionCache.class);
 
-	private RedisPool redisPool;
+	private RedisPool cachePool;
 
 	@Override
 	public void put(String sessionId, SessionMap sessionMap, int timeout) {
 		Jedis jedis = null;
 		try {
-			jedis = redisPool.getResource();
+			jedis = cachePool.getResource();
 			jedis.set(sessionId.getBytes(), SerializeUtil.serialize(sessionMap));
 			jedis.expire(sessionId, timeout);
 		} catch (Exception e) {
@@ -34,7 +34,7 @@ public class RedisSessionCache implements SessionCache {
 		SessionMap sessionMap = null;
 		byte[] reslut = null;
 		try {
-			jedis = redisPool.getResource();
+			jedis = cachePool.getResource();
 			if (jedis.exists(sessionId)) {
 				reslut = jedis.get(sessionId.getBytes());
 				sessionMap = (SessionMap) SerializeUtil.unserialize(reslut);
@@ -52,7 +52,7 @@ public class RedisSessionCache implements SessionCache {
 	public void setMaxInactiveInterval(String sessionId, int interval) {
 		Jedis jedis = null;
 		try {
-			jedis = redisPool.getResource();
+			jedis = cachePool.getResource();
 			if (jedis.exists(sessionId)) {
 				jedis.expire(sessionId, interval);
 			}
@@ -67,7 +67,7 @@ public class RedisSessionCache implements SessionCache {
 	public void destroy(String sessionId) {
 		Jedis jedis = null;
 		try {
-			jedis = redisPool.getResource();
+			jedis = cachePool.getResource();
 			if (jedis.exists(sessionId)) {
 				jedis.expire(sessionId, 0);
 			}
@@ -78,8 +78,8 @@ public class RedisSessionCache implements SessionCache {
 		}
 	}
 
-	public void setRedisPool(RedisPool redisPool) {
-		this.redisPool = redisPool;
+	public void setCachePool(RedisPool redisPool) {
+		this.cachePool = redisPool;
 	}
 
 }
