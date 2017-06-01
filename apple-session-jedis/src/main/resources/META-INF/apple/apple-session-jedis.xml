@@ -9,7 +9,7 @@
 
 	<bean id="redisSentinelPool" class="com.appleframework.session.data.jedis.RedisSinglePool">
 		<property name="hosts" value="${redis.hosts}" />
-		<property name="password" value="${redis.auth}" />
+		<property name="password" value="${redis.password}" />
 		<property name="maxIdle" value="${redis.maxIdle:5}" />
 		<property name="maxTotal" value="${redis.maxTotal:20}" />
 		<property name="maxWaitMillis" value="${redis.maxWaitMillis:10000}" />
