@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.appleframework.session</groupId>
 	<artifactId>apple-session</artifactId>
-	<version>0.0.1.RELEASE</version>
+	<version>0.0.2.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<name>apple-session</name>
@@ -101,7 +102,7 @@
 				<artifactId>jodis</artifactId>
 				<version>0.3.0</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.redisson</groupId>
 				<artifactId>redisson</artifactId>
@@ -183,11 +184,11 @@
 			<distributionManagement>
 				<repository>
 					<id>nexus-releases</id>
-					<url>http://mvnrepo.appleframework.com:8081/nexus/content/repositories/releases/</url>
+					<url>http://nexus.appleframework.com:8081/nexus/content/repositories/releases/</url>
 				</repository>
 				<snapshotRepository>
 					<id>nexus-snapshots</id>
-					<url>http://mvnrepo.appleframework.com:8081/nexus/content/repositories/snapshots/</url>
+					<url>http://nexus.appleframework.com:8081/nexus/content/repositories/snapshots/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
@@ -195,10 +196,10 @@
 
 	<modules>
 		<module>apple-session-core</module>
-		<module>apple-session-redis</module>
+		<module>apple-session-jedis</module>
 		<module>apple-session-codis</module>
 		<module>apple-session-redisson</module>
 		<module>apple-session-memcached</module>
-    <module>apple-session-jedis</module>
-  </modules>
+	</modules>
+	
 </project>
