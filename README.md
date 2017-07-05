@@ -26,9 +26,8 @@ http://git.oschina.net/uncode/uncode-session
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-## 2. 基于Redis的Spring配置
-
-
+## 2. 基于Jedis的Spring配置
+	
 	<!-- 配置Redis缓存池（默认基于redis实现，所以只需要配置缓存池就可以了） -->
 	<bean id="redisSentinelPool" class="com.appleframework.session.data.jedis.RedisSentinelPool">
 		<property name="hosts" value="127.0.0.1:6379,127.0.0.1:6379" />
@@ -54,7 +53,7 @@ http://git.oschina.net/uncode/uncode-session
     </bean>
     
     <bean id="sessionCache" class="com.appleframework.session.data.jedis.RedisSessionCache">
-    		<property name="cachePool" ref="memcachedPool" />
+    	<property name="cachePool" ref="memcachedPool" />
 	</bean>
 	
 ## 4. 配置会话缓存管理器
@@ -62,7 +61,6 @@ http://git.oschina.net/uncode/uncode-session
 	<bean id="sessionCacheManager" class="com.appleframework.session.data.SessionCacheManager">
 		<property name="sessionCache" ref="sessionCache" />
 	</bean>
-
 
 
 ------------------------------------------------------------------------
