@@ -30,14 +30,8 @@ http://git.oschina.net/uncode/uncode-session
 
 
 	<!-- 配置Redis缓存池（默认基于redis实现，所以只需要配置缓存池就可以了） -->
-
-	<bean id="redisSentinelPool" class="com.appleframework.session.data.redis.RedisSentinelPool">
-		<property name="hosts">
-    		<list>
-    			<value>127.0.0.1:26379</value>
-    			<value>127.0.0.2:26379</value>
-    		</list>
-    	</property>
+	<bean id="redisSentinelPool" class="com.appleframework.session.data.jedis.RedisSentinelPool">
+		<property name="hosts" value="127.0.0.1:6379,127.0.0.1:6379" />
     	<property name="auth" value="123456" />
 		<property name="maxIdle" value="5" />
 		<property name="maxTotal" value="20" />
@@ -59,7 +53,7 @@ http://git.oschina.net/uncode/uncode-session
         </property>
     </bean>
     
-    <bean id="sessionCache" class="com.appleframework.session.data.redis.RedisSessionCache">
+    <bean id="sessionCache" class="com.appleframework.session.data.jedis.RedisSessionCache">
     		<property name="cachePool" ref="memcachedPool" />
 	</bean>
 	
