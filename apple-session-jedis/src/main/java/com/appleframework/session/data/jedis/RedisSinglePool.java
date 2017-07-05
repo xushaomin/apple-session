@@ -21,8 +21,7 @@ public class RedisSinglePool implements InitializingBean, DisposableBean, RedisP
 	private int maxWaitMillis = 10000;
 	private boolean testOnBorrow = true;
 
-	private int connectionTimeout = 2000;
-	private int soTimeout = 2000;
+	private int timeout = 2000;
 
 	private String clientName;
 
@@ -34,12 +33,8 @@ public class RedisSinglePool implements InitializingBean, DisposableBean, RedisP
 		this.database = database;
 	}
 
-	public void setConnectionTimeout(int connectionTimeout) {
-		this.connectionTimeout = connectionTimeout;
-	}
-
-	public void setSoTimeout(int soTimeout) {
-		this.soTimeout = soTimeout;
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	public void setClientName(String clientName) {
@@ -106,7 +101,7 @@ public class RedisSinglePool implements InitializingBean, DisposableBean, RedisP
 		poolConfig.setMaxTotal(maxTotal);
 		poolConfig.setMaxWaitMillis(maxWaitMillis);
 		poolConfig.setTestOnBorrow(testOnBorrow);
-		jedisPool = new JedisPool(poolConfig, host, port, connectionTimeout, soTimeout, password, database, clientName);
+		jedisPool = new JedisPool(poolConfig, host, port, timeout, password, database, clientName);
 	}
 
 }
