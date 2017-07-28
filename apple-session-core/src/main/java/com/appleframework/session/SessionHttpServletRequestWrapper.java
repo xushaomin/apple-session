@@ -12,14 +12,12 @@ import com.appleframework.session.data.SessionMap;
 public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	
 	public static final String CURRENT_SESSION_ATTR = SessionHttpServletRequestWrapper.class.getName();
-		
-	private ServletContext servletContext;
-	private int maxActiveTime;
+	
+	private ServletContext servletContext;	
 
-	public SessionHttpServletRequestWrapper(HttpServletRequest request, int maxActiveTime, ServletContext servletContext) {
+	public SessionHttpServletRequestWrapper(HttpServletRequest request, ServletContext servletContext) {
 		super(request);
 		this.servletContext = servletContext;
-		this.maxActiveTime = maxActiveTime;
 	}
 	
 	@Override
@@ -49,9 +47,9 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 		if(sessionId != null) {
 			SessionMap sessionMap = SessionCacheManager.getSessionCache().get(sessionId);
 			if(sessionMap != null && sessionMap.isInvalidated() == false) {
-				currentSession = new HttpSessionWrapper(sessionMap, SessionCacheManager.getSessionCache(), maxActiveTime, servletContext);
+				currentSession = new HttpSessionWrapper(sessionMap, SessionCacheManager.getSessionCache(), servletContext);
 				currentSession.setNew(false);
-				currentSession.setMaxInactiveInterval(maxActiveTime);
+				currentSession.setMaxInactiveInterval(currentSession.getMaxInactiveInterval());
 				setCurrentSession(currentSession);
 				return currentSession;
 			}
@@ -60,13 +58,11 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 		if(!create) {
 			return null;
 		}
-		/*if(StringUtils.isNotEmpty(sessionId)){
-			SessionCacheManager.getSessionCache().destroy(sessionId);
-		}*/
 		HttpSession httpSession = super.getSession();
 		SessionMap sessionMap = new SessionMap(httpSession);
-		currentSession = new HttpSessionWrapper(sessionMap, SessionCacheManager.getSessionCache(), maxActiveTime, servletContext);
-		SessionCacheManager.getSessionCache().put(sessionMap.getId(), sessionMap, maxActiveTime);
+		currentSession = new HttpSessionWrapper(sessionMap, SessionCacheManager.getSessionCache(), servletContext);
+		int sessionTimeOut = httpSession.getMaxInactiveInterval();
+		SessionCacheManager.getSessionCache().put(sessionMap.getId(), sessionMap, sessionTimeOut);
 		setCurrentSession(currentSession);
 		return currentSession;
     }
@@ -91,7 +87,4 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 		return httpSessionWrapper.isInvalidated();
     }
 	
-	
-
-
 }

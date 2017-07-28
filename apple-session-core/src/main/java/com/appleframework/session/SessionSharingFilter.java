@@ -14,46 +14,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.appleframework.session.data.SessionCacheManager;
 
 public class SessionSharingFilter implements Filter {
 	
-	private static final int MAX_ACTIVE_TIME = 60*30;//秒
-	private static final String MAX_ACTIVE_TIME_KEY = "maxActiveTime";
-	
 	private ServletContext servletContext;
-	private int maxActiveTime = MAX_ACTIVE_TIME;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		servletContext = filterConfig.getServletContext();
-		String matString = filterConfig.getInitParameter(MAX_ACTIVE_TIME_KEY);
-		if(StringUtils.isNotEmpty(matString)){
-			maxActiveTime = Integer.valueOf(matString);
-		}
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-		HttpServletResponse HttpServletResponse = (HttpServletResponse)response;
-		SessionHttpServletRequestWrapper sessionHttpServletRequestWrapper = new SessionHttpServletRequestWrapper(httpServletRequest, maxActiveTime, servletContext);
-        try{
-        	chain.doFilter(sessionHttpServletRequestWrapper, HttpServletResponse);
-		}catch(Exception e){
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpServletResponse HttpServletResponse = (HttpServletResponse) response;
+		SessionHttpServletRequestWrapper sessionHttpServletRequestWrapper = new SessionHttpServletRequestWrapper(httpServletRequest, servletContext);
+		try {
+			chain.doFilter(sessionHttpServletRequestWrapper, HttpServletResponse);
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-        finally {
-			if(sessionHttpServletRequestWrapper.isRequestedSessionIdValid()){
+		} finally {
+			if (sessionHttpServletRequestWrapper.isRequestedSessionIdValid()) {
 				Cookie cookie = new Cookie("JSESSIONID", null);
 				cookie.setMaxAge(0);
 				HttpServletResponse.addCookie(cookie);
 				HttpSession httpSession = sessionHttpServletRequestWrapper.getSession(false);
-				if(httpSession != null){
-					SessionCacheManager.getSessionCache().put(httpSession.getId(), null, 0);
+				if (httpSession != null) {
+					SessionCacheManager.getSessionCache().setMaxInactiveInterval(httpSession.getId(), 0);
 				}
 			}
 		}

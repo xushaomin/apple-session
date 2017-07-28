@@ -18,13 +18,10 @@ public class HttpSessionWrapper implements HttpSession {
 	private SessionMap sessionMap;
 	private SessionCache sessionCache;
 	private boolean old;
-	private int maxActiveTime;	
-
-	public HttpSessionWrapper(SessionMap sessionMap, SessionCache sessionCache, 
-			int maxActiveTime, ServletContext servletContext) {
+	
+	public HttpSessionWrapper(SessionMap sessionMap, SessionCache sessionCache, ServletContext servletContext) {
 		this.sessionMap = sessionMap;
 		this.sessionCache = sessionCache;
-		this.maxActiveTime = maxActiveTime;
 		this.servletContext = servletContext;
 	}
 	
@@ -34,15 +31,13 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 	
 	public void setAttribute(String name, Object value) {
-		checkState();
 		sessionMap.setAttribute(name, value);
-		sessionCache.put(sessionMap.getId(), sessionMap, maxActiveTime);
+		sessionCache.put(sessionMap.getId(), sessionMap, sessionMap.getMaxInactiveInterval());
 	}
 	
 	public void removeAttribute(String name) {
-		checkState();
 		sessionMap.removeAttribute(name);
-		sessionCache.put(sessionMap.getId(), sessionMap, maxActiveTime);
+		sessionCache.put(sessionMap.getId(), sessionMap, sessionMap.getMaxInactiveInterval());
 	}
 
 	public void putValue(String name, Object value) {
@@ -54,7 +49,6 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	public long getCreationTime() {
-		checkState();
 		return sessionMap.getCreationTime();
 	}
 
@@ -63,7 +57,6 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	public long getLastAccessedTime() {
-		checkState();
 		return sessionMap.getLastAccessedTime();
 	}
 
@@ -71,14 +64,12 @@ public class HttpSessionWrapper implements HttpSession {
 		return servletContext;
 	}
 
-	
 	public int getMaxInactiveInterval() {
 		return sessionMap.getMaxInactiveInterval();
 	}
 
 
 	public Object getAttribute(String name) {
-		checkState();
 		return sessionMap.getAttribute(name);
 	}
 
@@ -87,20 +78,17 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	public Enumeration<String> getAttributeNames() {
-		checkState();
 		return Collections.enumeration(sessionMap.getAttributeNames());
 	}
 
 	public String[] getValueNames() {
-		checkState();
 		Set<String> attrs = sessionMap.getAttributeNames();
 		return attrs.toArray(new String[0]);
 	}
 
 	public void invalidate() {
-		checkState();
 		sessionMap.setInvalidated(true);
-		sessionCache.put(sessionMap.getId(), sessionMap, maxActiveTime);
+		sessionCache.destroy(sessionMap.getId());
 		setCurrentSession(null);
 	}
 
@@ -109,7 +97,6 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	public boolean isNew() {
-		checkState();
 		return !old;
 	}
 
@@ -130,10 +117,5 @@ public class HttpSessionWrapper implements HttpSession {
 		}
 	}
 	
-	private void checkState() {
-		if(sessionMap.isInvalidated()) {
-			throw new IllegalStateException("The HttpSession has already be invalidated.");
-		}
-	}
 
 }

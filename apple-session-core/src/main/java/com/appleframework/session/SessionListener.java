@@ -13,8 +13,6 @@ import javax.servlet.http.HttpSessionListener;
  */
 public class SessionListener implements HttpSessionListener{
 	
-	//private static final int MAX_INACTIVE_INTERVAL = 1000*60*60*8;
-
     public void sessionCreated(HttpSessionEvent event) {
     	//ignore
     }
@@ -23,7 +21,5 @@ public class SessionListener implements HttpSessionListener{
     public void sessionDestroyed(HttpSessionEvent event) {
     	//ignore
     }
-
-   
 
 }

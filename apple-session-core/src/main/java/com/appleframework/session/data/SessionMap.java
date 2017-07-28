@@ -26,8 +26,6 @@ public class SessionMap implements Serializable {
 		if (session == null) {
 			throw new IllegalArgumentException("session cannot be null");
 		}
-		// String uuid = UUID.randomUUID().toString();
-		// this.id = uuid.replaceAll("-", "").toUpperCase();
 		this.id = session.getId();
 		this.sessionAttrs = new HashMap<String, Object>();
 		Enumeration<?> names = session.getAttributeNames();

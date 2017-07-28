@@ -15,16 +15,15 @@ import org.apache.commons.lang3.StringUtils;
 public class MapSession implements Serializable {
 
 	private static final long serialVersionUID = 3455295045889076281L;
-	
+
 	private String id = UUID.randomUUID().toString();
 	private Map<String, Object> sessionAttrs = new HashMap<String, Object>();
 	private long creationTime = System.currentTimeMillis();
 	private long lastAccessedTime = creationTime;
 	private int maxInactiveInterval;
-	
-	
+
 	public MapSession(HttpSession session) {
-		if(session == null) {
+		if (session == null) {
 			throw new IllegalArgumentException("session cannot be null");
 		}
 		this.id = session.getId();
@@ -33,7 +32,7 @@ public class MapSession implements Serializable {
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();
 			Object attrValue = session.getAttribute(name);
-			if(StringUtils.isNotEmpty(name) && attrValue != null){
+			if (StringUtils.isNotEmpty(name) && attrValue != null) {
 				this.sessionAttrs.put(name, attrValue);
 			}
 		}
@@ -41,7 +40,6 @@ public class MapSession implements Serializable {
 		this.creationTime = session.getCreationTime();
 		this.maxInactiveInterval = session.getMaxInactiveInterval();
 	}
-	
 
 	public String getId() {
 		return id;
@@ -68,7 +66,7 @@ public class MapSession implements Serializable {
 	}
 
 	boolean isExpired(long now) {
-		if(maxInactiveInterval < 0) {
+		if (maxInactiveInterval < 0) {
 			return false;
 		}
 		return now - TimeUnit.SECONDS.toMillis(maxInactiveInterval) >= lastAccessedTime;
@@ -89,16 +87,15 @@ public class MapSession implements Serializable {
 	public Set<String> getAttributeNames() {
 		return sessionAttrs.keySet();
 	}
-	
+
 	public void setAttribute(String attributeName, Object attributeValue) {
 		sessionAttrs.put(attributeName, attributeValue);
-		
 	}
 
 	public void removeAttribute(String attributeName) {
 		sessionAttrs.remove(attributeName);
 	}
-	
+
 	public void setMaxInactiveInterval(int interval) {
 		this.maxInactiveInterval = interval;
 	}
@@ -106,7 +103,5 @@ public class MapSession implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
 
 }
