@@ -51,6 +51,7 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 			if(sessionMap != null && sessionMap.isInvalidated() == false) {
 				currentSession = new HttpSessionWrapper(sessionMap, SessionCacheManager.getSessionCache(), maxActiveTime, servletContext);
 				currentSession.setNew(false);
+				currentSession.setMaxInactiveInterval(maxActiveTime);
 				setCurrentSession(currentSession);
 				return currentSession;
 			}
@@ -59,7 +60,7 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 		if(!create) {
 			return null;
 		}
-/*		if(StringUtils.isNotEmpty(sessionId)){
+		/*if(StringUtils.isNotEmpty(sessionId)){
 			SessionCacheManager.getSessionCache().destroy(sessionId);
 		}*/
 		HttpSession httpSession = super.getSession();
