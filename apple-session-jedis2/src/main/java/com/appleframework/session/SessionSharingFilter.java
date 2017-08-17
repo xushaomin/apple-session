@@ -41,33 +41,7 @@ public class SessionSharingFilter implements Filter {
 	}
 
 	private void initConfig() {
-		/*String cookieDomain = p.getProperty("cookie.domain", "");
-		String cookiePath = p.getProperty("cookie.path", "/");
-		String cookieName = p.getProperty("cookie.name", SessionConfig.DEFAULT_COOKIENNAME);
-		String cookiemaxAgeStr = p.getProperty("cookie.maxAge");
-		int cookieMaxAge = SessionConfig.DEFAULT_COOKIEMAXAGE;
-		if (cookiemaxAgeStr != null && !"".equals(cookiemaxAgeStr.trim())) {
-			try {
-				cookieMaxAge = Integer.valueOf(cookiemaxAgeStr);
-			} catch (Exception e) {
-			}
-		}
-		String sessionTimeoutStr = p.getProperty("session.timeout");
-		int sessionTimeout = SessionConfig.DEFAULT_SESSION_TIMEOUT;
-		if (sessionTimeoutStr != null && !"".equals(sessionTimeoutStr.trim())) {
-			try {
-				sessionTimeout = Integer.valueOf(sessionTimeoutStr);
-			} catch (Exception e) {
-			}
-		}*/
-		//SessionConfig config = SessionConfig.INSTANCE;
 		SessionConfig.setContext(context);
-				
-		/*config.setCookieDomain(cookieDomain);
-		config.setCookieMaxAge(cookieMaxAge);
-		config.setCookieName(cookieName);
-		config.setCookiePath(cookiePath);
-		config.setSessionTimeout(sessionTimeout);*/
 	}
 
 }

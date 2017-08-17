@@ -58,7 +58,8 @@ public class SessionHttpServletRequestWrapper extends HttpServletRequestWrapper 
 	}
 
 	private HttpSessionWrapper buildSession(String sessionId, boolean create) {
-		HttpSessionWrapper session = new HttpSessionWrapper(sessionId, request.getSession().getMaxInactiveInterval());
+		int maxAlive = request.getSession().getMaxInactiveInterval();
+		HttpSessionWrapper session = new HttpSessionWrapper(sessionId, maxAlive);
 		if (create) {
 			addCookie(sessionId);
 		}
